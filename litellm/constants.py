@@ -1,5 +1,7 @@
-from typing import List
+from typing import List, Literal
+import os
 
+LITELLM_LABEL=os.getenv("LITELLM_LABEL","litellm")
 ROUTER_MAX_FALLBACKS = 5
 DEFAULT_BATCH_SIZE = 512
 DEFAULT_FLUSH_INTERVAL_SECONDS = 5

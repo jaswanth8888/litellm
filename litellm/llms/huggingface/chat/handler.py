@@ -45,7 +45,7 @@ hf_tasks_embeddings = Literal[  # pipeline tags + hf tei endpoints - https://hug
 
 
 def get_hf_task_embedding_for_model(
-    model: str, task_type: Optional[str], api_base: str
+    model: str, task_type: Optional[str], api_base: str,headers: dict
 ) -> Optional[str]:
     if task_type is not None:
         if task_type in get_args(hf_tasks_embeddings):
@@ -57,18 +57,18 @@ def get_hf_task_embedding_for_model(
                 )
             )
     http_client = HTTPHandler(concurrent_limit=1)
-
-    model_info = http_client.get(url=api_base)
-
-    model_info_dict = model_info.json()
-
-    pipeline_tag: Optional[str] = model_info_dict.get("pipeline_tag", None)
-
+    pipeline_tag: Optional[str] = None
+    try:
+        model_info = http_client.get(url=api_base, headers=headers)
+        model_info_dict = model_info.json()
+        pipeline_tag = model_info_dict.get("pipeline_tag", None)
+    except Exception as e:
+        return pipeline_tag
     return pipeline_tag
 
 
 async def async_get_hf_task_embedding_for_model(
-    model: str, task_type: Optional[str], api_base: str
+    model: str, task_type: Optional[str], api_base: str, headers: dict
 ) -> Optional[str]:
     if task_type is not None:
         if task_type in get_args(hf_tasks_embeddings):
@@ -82,13 +82,13 @@ async def async_get_hf_task_embedding_for_model(
     http_client = get_async_httpx_client(
         llm_provider=litellm.LlmProviders.HUGGINGFACE,
     )
-
-    model_info = await http_client.get(url=api_base)
-
-    model_info_dict = model_info.json()
-
-    pipeline_tag: Optional[str] = model_info_dict.get("pipeline_tag", None)
-
+    pipeline_tag: Optional[str] = None
+    try:
+        model_info = await http_client.get(url=api_base, headers=headers)
+        model_info_dict = model_info.json()
+        pipeline_tag = model_info_dict.get("pipeline_tag", None)
+    except Exception as e:
+        return pipeline_tag
     return pipeline_tag
 
 
@@ -387,9 +387,10 @@ class Huggingface(BaseLLM):
         embed_url: str,
         input: List,
         optional_params: dict,
+        headers: dict,
     ) -> dict:
         hf_task = await async_get_hf_task_embedding_for_model(
-            model=model, task_type=task_type, api_base=embed_url
+            model=model, task_type=task_type, api_base=embed_url, headers=headers
         )
 
         data = self._transform_input_on_pipeline_tag(input=input, pipeline_tag=hf_task)
@@ -429,6 +430,7 @@ class Huggingface(BaseLLM):
         model: str,
         call_type: Literal["sync", "async"],
         optional_params: dict,
+        headers: dict,
         embed_url: str,
     ) -> dict:
         data: Dict = {}
@@ -448,11 +450,11 @@ class Huggingface(BaseLLM):
 
             if call_type == "sync":
                 hf_task = get_hf_task_embedding_for_model(
-                    model=model, task_type=task_type, api_base=embed_url
+                    model=model, task_type=task_type, api_base=embed_url, headers=headers
                 )
             elif call_type == "async":
                 return self._async_transform_input(
-                    model=model, task_type=task_type, embed_url=embed_url, input=input
+                    model=model, task_type=task_type, embed_url=embed_url, input=input,headers=headers
                 )  # type: ignore
 
             data = self._transform_input_on_pipeline_tag(
@@ -552,6 +554,7 @@ class Huggingface(BaseLLM):
             model=model,
             call_type="sync",
             optional_params=optional_params,
+            headers=headers,
             embed_url=api_base,
         )
 

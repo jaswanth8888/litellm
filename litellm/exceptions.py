@@ -15,8 +15,7 @@ import httpx
 import openai
 
 from litellm.types.utils import LiteLLMCommonStrings
-
-
+from litellm.constants import LITELLM_LABEL as label
 class AuthenticationError(openai.AuthenticationError):  # type: ignore
     def __init__(
         self,
@@ -29,7 +28,7 @@ class AuthenticationError(openai.AuthenticationError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 401
-        self.message = "litellm.AuthenticationError: {}".format(message)
+        self.message = "{}.AuthenticationError: {}".format(label,message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -48,17 +47,17 @@ class AuthenticationError(openai.AuthenticationError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -75,7 +74,7 @@ class NotFoundError(openai.NotFoundError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 404
-        self.message = "litellm.NotFoundError: {}".format(message)
+        self.message = "{}.NotFoundError: {}".format(label, message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -94,17 +93,17 @@ class NotFoundError(openai.NotFoundError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -120,7 +119,7 @@ class BadRequestError(openai.BadRequestError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 400
-        self.message = "litellm.BadRequestError: {}".format(message)
+        self.message = "{label}.BadRequestError: {}".format(message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -139,17 +138,17 @@ class BadRequestError(openai.BadRequestError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -165,7 +164,7 @@ class UnprocessableEntityError(openai.UnprocessableEntityError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 422
-        self.message = "litellm.UnprocessableEntityError: {}".format(message)
+        self.message = "{}.UnprocessableEntityError: {}".format(label,message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -178,17 +177,17 @@ class UnprocessableEntityError(openai.UnprocessableEntityError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -211,7 +210,7 @@ class Timeout(openai.APITimeoutError):  # type: ignore
             request=request
         )  # Call the base class constructor with the parameters it needs
         self.status_code = 408
-        self.message = "litellm.Timeout: {}".format(message)
+        self.message = "{}.Timeout: {}".format(label, message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -223,17 +222,17 @@ class Timeout(openai.APITimeoutError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -249,7 +248,7 @@ class PermissionDeniedError(openai.PermissionDeniedError):  # type:ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 403
-        self.message = "litellm.PermissionDeniedError: {}".format(message)
+        self.message = "{}.PermissionDeniedError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -262,17 +261,17 @@ class PermissionDeniedError(openai.PermissionDeniedError):  # type:ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -288,7 +287,7 @@ class RateLimitError(openai.RateLimitError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 429
-        self.message = "litellm.RateLimitError: {}".format(message)
+        self.message = "{}.RateLimitError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -314,17 +313,17 @@ class RateLimitError(openai.RateLimitError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -353,22 +352,22 @@ class ContextWindowExceededError(BadRequestError):  # type: ignore
         )  # Call the base class constructor with the parameters it needs
 
         # set after, to make it clear the raised error is a context window exceeded error
-        self.message = "litellm.ContextWindowExceededError: {}".format(self.message)
+        self.message = "{}.ContextWindowExceededError: {}".format(label, self.message)
 
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -383,7 +382,7 @@ class RejectedRequestError(BadRequestError):  # type: ignore
         litellm_debug_info: Optional[str] = None,
     ):
         self.status_code = 400
-        self.message = "litellm.RejectedRequestError: {}".format(message)
+        self.message = "{}.RejectedRequestError: {}".format(label, message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -401,17 +400,17 @@ class RejectedRequestError(BadRequestError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -426,7 +425,7 @@ class ContentPolicyViolationError(BadRequestError):  # type: ignore
         litellm_debug_info: Optional[str] = None,
     ):
         self.status_code = 400
-        self.message = "litellm.ContentPolicyViolationError: {}".format(message)
+        self.message = "{}.ContentPolicyViolationError: {}".format(label, message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -443,17 +442,17 @@ class ContentPolicyViolationError(BadRequestError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -469,7 +468,7 @@ class ServiceUnavailableError(openai.APIStatusError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 503
-        self.message = "litellm.ServiceUnavailableError: {}".format(message)
+        self.message = "{}.ServiceUnavailableError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -489,17 +488,17 @@ class ServiceUnavailableError(openai.APIStatusError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -515,7 +514,7 @@ class InternalServerError(openai.InternalServerError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 500
-        self.message = "litellm.InternalServerError: {}".format(message)
+        self.message = "{}.InternalServerError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -535,17 +534,17 @@ class InternalServerError(openai.InternalServerError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -563,7 +562,7 @@ class APIError(openai.APIError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = status_code
-        self.message = "litellm.APIError: {}".format(message)
+        self.message = "{}.APIError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info
@@ -576,17 +575,17 @@ class APIError(openai.APIError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -602,7 +601,7 @@ class APIConnectionError(openai.APIConnectionError):  # type: ignore
         max_retries: Optional[int] = None,
         num_retries: Optional[int] = None,
     ):
-        self.message = "litellm.APIConnectionError: {}".format(message)
+        self.message = "{}.APIConnectionError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.status_code = 500
@@ -615,17 +614,17 @@ class APIConnectionError(openai.APIConnectionError):  # type: ignore
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -640,7 +639,7 @@ class APIResponseValidationError(openai.APIResponseValidationError):  # type: ig
         max_retries: Optional[int] = None,
         num_retries: Optional[int] = None,
     ):
-        self.message = "litellm.APIResponseValidationError: {}".format(message)
+        self.message = "{}.APIResponseValidationError: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         request = httpx.Request(method="POST", url="https://api.openai.com/v1")
@@ -653,17 +652,17 @@ class APIResponseValidationError(openai.APIResponseValidationError):  # type: ig
     def __str__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
     def __repr__(self):
         _message = self.message
         if self.num_retries:
-            _message += f" LiteLLM Retried: {self.num_retries} times"
+            _message += f" {label} Retried: {self.num_retries} times"
         if self.max_retries:
-            _message += f", LiteLLM Max Retries: {self.max_retries}"
+            _message += f", {label} Max Retries: {self.max_retries}"
         return _message
 
 
@@ -674,7 +673,7 @@ class JSONSchemaValidationError(APIResponseValidationError):
         self.raw_response = raw_response
         self.schema = schema
         self.model = model
-        message = "litellm.JSONSchemaValidationError: model={}, returned an invalid response={}, for schema={}.\nAccess raw response with `e.raw_response`".format(
+        message = "{}.JSONSchemaValidationError: model={}, returned an invalid response={}, for schema={}.\nAccess raw response with `e.raw_response`".format(label, 
             model, raw_response, schema
         )
         self.message = message
@@ -700,7 +699,7 @@ class UnsupportedParamsError(BadRequestError):
         num_retries: Optional[int] = None,
     ):
         self.status_code = 400
-        self.message = "litellm.UnsupportedParamsError: {}".format(message)
+        self.message = "{}.UnsupportedParamsError: {}".format(label, message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info
@@ -783,7 +782,7 @@ class MockException(openai.APIError):
         num_retries: Optional[int] = None,
     ):
         self.status_code = status_code
-        self.message = "litellm.MockException: {}".format(message)
+        self.message = "{}.MockException: {}".format(label, message)
         self.llm_provider = llm_provider
         self.model = model
         self.litellm_debug_info = litellm_debug_info

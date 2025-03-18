@@ -6,6 +6,7 @@ import httpx
 
 import litellm
 from litellm import verbose_logger
+from litellm.constants import LITELLM_LABEL as label
 
 from ..exceptions import (
     APIConnectionError,
@@ -556,14 +557,14 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                     ):
                         exception_mapping_worked = True
                         raise litellm.InternalServerError(
-                            message=f"AnthropicException - {error_str}. Handle with `litellm.InternalServerError`.",
+                            message=f"AnthropicException - {error_str}. Handle with `{label}.InternalServerError`.",
                             llm_provider="anthropic",
                             model=model,
                         )
                     elif original_exception.status_code == 503:
                         exception_mapping_worked = True
                         raise litellm.ServiceUnavailableError(
-                            message=f"AnthropicException - {error_str}. Handle with `litellm.ServiceUnavailableError`.",
+                            message=f"AnthropicException - {error_str}. Handle with `{label}.ServiceUnavailableError`.",
                             llm_provider="anthropic",
                             model=model,
                         )
@@ -970,7 +971,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 if "Unable to locate credentials" in error_str:
                     exception_mapping_worked = True
                     raise BadRequestError(
-                        message=f"litellm.BadRequestError: SagemakerException - {error_str}",
+                        message=f"{label}.BadRequestError: SagemakerException - {error_str}",
                         model=model,
                         llm_provider="sagemaker",
                         response=getattr(original_exception, "response", None),
@@ -1092,7 +1093,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 ):
                     exception_mapping_worked = True
                     raise BadRequestError(
-                        message=f"litellm.BadRequestError: VertexAIException - {error_str}",
+                        message=f"{label}.BadRequestError: VertexAIException - {error_str}",
                         model=model,
                         llm_provider="vertex_ai",
                         response=httpx.Response(
@@ -1117,7 +1118,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 ):
                     exception_mapping_worked = True
                     raise litellm.InternalServerError(
-                        message=f"litellm.InternalServerError: VertexAIException - {error_str}",
+                        message=f"{label}.InternalServerError: VertexAIException - {error_str}",
                         model=model,
                         llm_provider="vertex_ai",
                         response=httpx.Response(
@@ -1178,7 +1179,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 ):
                     exception_mapping_worked = True
                     raise RateLimitError(
-                        message=f"litellm.RateLimitError: VertexAIException - {error_str}",
+                        message=f"{label}.RateLimitError: VertexAIException - {error_str}",
                         model=model,
                         llm_provider="vertex_ai",
                         litellm_debug_info=extra_information,
@@ -1196,7 +1197,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 ):
                     exception_mapping_worked = True
                     raise litellm.InternalServerError(
-                        message=f"litellm.InternalServerError: VertexAIException - {error_str}",
+                        message=f"{label}.InternalServerError: VertexAIException - {error_str}",
                         model=model,
                         llm_provider="vertex_ai",
                         litellm_debug_info=extra_information,
@@ -1242,7 +1243,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                     if original_exception.status_code == 429:
                         exception_mapping_worked = True
                         raise RateLimitError(
-                            message=f"litellm.RateLimitError: VertexAIException - {error_str}",
+                            message=f"{label}.RateLimitError: VertexAIException - {error_str}",
                             model=model,
                             llm_provider="vertex_ai",
                             litellm_debug_info=extra_information,
@@ -1938,7 +1939,7 @@ def exception_type(  # type: ignore  # noqa: PLR0915
                 ):
                     exception_mapping_worked = True
                     raise ContentPolicyViolationError(
-                        message=f"litellm.ContentPolicyViolationError: AzureException - {message}",
+                        message=f"{label}.ContentPolicyViolationError: AzureException - {message}",
                         llm_provider="azure",
                         model=model,
                         litellm_debug_info=extra_information,
@@ -2238,11 +2239,11 @@ def exception_logging(
                 )  # Expectation: any logger function passed in by the user should accept a dict object
             except Exception:
                 verbose_logger.debug(
-                    f"LiteLLM.LoggingError: [Non-Blocking] Exception occurred while logging {traceback.format_exc()}"
+                    f"{label}.LoggingError: [Non-Blocking] Exception occurred while logging {traceback.format_exc()}"
                 )
     except Exception:
         verbose_logger.debug(
-            f"LiteLLM.LoggingError: [Non-Blocking] Exception occurred while logging {traceback.format_exc()}"
+            f"{label}.LoggingError: [Non-Blocking] Exception occurred while logging {traceback.format_exc()}"
         )
         pass
 
