@@ -108,6 +108,7 @@ from litellm import Router
 from litellm._logging import verbose_proxy_logger, verbose_router_logger
 from litellm.caching.caching import DualCache, RedisCache
 from litellm.constants import LITELLM_PROXY_ADMIN_NAME
+from litellm.constants import LITELLM_LABEL as label
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -8775,7 +8776,7 @@ async def get_litellm_model_cost_map():
 
 @router.get("/", dependencies=[Depends(user_api_key_auth)])
 async def home(request: Request):
-    return "LiteLLM: RUNNING"
+    return f"{label}: RUNNING"
 
 
 @router.get("/routes", dependencies=[Depends(user_api_key_auth)])
