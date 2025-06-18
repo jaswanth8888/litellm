@@ -108,7 +108,7 @@ from litellm import Router
 from litellm._logging import verbose_proxy_logger, verbose_router_logger
 from litellm.caching.caching import DualCache, RedisCache
 from litellm.constants import LITELLM_PROXY_ADMIN_NAME
-from litellm.constants import LITELLM_LABEL as label
+from litellm.constants import LITELLM_LABEL as label, REMOVE_LITELLM_HEADERS as remove_litellm_headers
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -362,7 +362,7 @@ else:
         global_max_parallel_request_retry_timeout_env
     )
 
-ui_link = f"{server_root_path}/ui/"
+ui_link = f"{server_root_path}/abcdefg/"
 ui_message = (
     f"👉 [```LiteLLM Admin Panel on /ui```]({ui_link}). Create, Edit Keys with SSO"
 )
@@ -800,27 +800,27 @@ def get_custom_headers(
     exclude_values = {"", None, "None"}
     hidden_params = hidden_params or {}
     headers = {
-        "x-litellm-call-id": call_id,
-        "x-litellm-model-id": model_id,
-        "x-litellm-cache-key": cache_key,
-        "x-litellm-model-api-base": api_base,
-        "x-litellm-version": version,
-        "x-litellm-model-region": model_region,
-        "x-litellm-response-cost": str(response_cost),
-        "x-litellm-key-tpm-limit": str(user_api_key_dict.tpm_limit),
-        "x-litellm-key-rpm-limit": str(user_api_key_dict.rpm_limit),
-        "x-litellm-key-max-budget": str(user_api_key_dict.max_budget),
-        "x-litellm-key-spend": str(user_api_key_dict.spend),
-        "x-litellm-response-duration-ms": str(hidden_params.get("_response_ms", None)),
-        "x-litellm-overhead-duration-ms": str(
+        f"{label}-call-id": call_id,
+        f"{label}-model-id": model_id,
+        f"{label}-cache-key": cache_key,
+        f"{label}-model-api-base": api_base,
+        f"{label}-version": version,
+        f"{label}-model-region": model_region,
+        f"{label}-response-cost": str(response_cost),
+        f"{label}-key-tpm-limit": str(user_api_key_dict.tpm_limit),
+        f"{label}-key-rpm-limit": str(user_api_key_dict.rpm_limit),
+        f"{label}-key-max-budget": str(user_api_key_dict.max_budget),
+        f"{label}-key-spend": str(user_api_key_dict.spend),
+        f"{label}-response-duration-ms": str(hidden_params.get("_response_ms", None)),
+        f"{label}-overhead-duration-ms": str(
             hidden_params.get("litellm_overhead_time_ms", None)
         ),
-        "x-litellm-fastest_response_batch_completion": (
+        f"{label}-fastest_response_batch_completion": (
             str(fastest_response_batch_completion)
             if fastest_response_batch_completion is not None
             else None
         ),
-        "x-litellm-timeout": str(timeout) if timeout is not None else None,
+        f"{label}-timeout": str(timeout) if timeout is not None else None,
         **{k: str(v) for k, v in kwargs.items()},
     }
     if request_data:
@@ -832,7 +832,8 @@ def get_custom_headers(
         logging_caching_headers = get_logging_caching_headers(request_data)
         if logging_caching_headers:
             headers.update(logging_caching_headers)
-
+    if remove_litellm_headers:
+        return {}
     try:
         return {
             key: str(value)

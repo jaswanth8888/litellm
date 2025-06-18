@@ -2,6 +2,7 @@ from typing import List, Literal
 import os
 
 LITELLM_LABEL=os.getenv("LITELLM_LABEL","litellm")
+REMOVE_LITELLM_HEADERS=os.getenv("REMOVE_HEADERS","false").lower() in ["true", "1", "yes"]
 ROUTER_MAX_FALLBACKS = 5
 DEFAULT_BATCH_SIZE = 512
 DEFAULT_FLUSH_INTERVAL_SECONDS = 5
