@@ -2792,14 +2792,21 @@ def get_error_message_str(e: Exception) -> str:
     return error_message
 
 
-def _get_redoc_url() -> str:
+def _get_redoc_url() -> Optional[str]:
     """
-    Get the redoc URL from the environment variables.
+    Get the Redoc URL from the environment variables.
 
     - If REDOC_URL is set, return it.
+    - If NO_REDOC is True, return None.
     - Otherwise, default to "/redoc".
     """
-    return os.getenv("REDOC_URL", "/redoc")
+    if redoc_url := os.getenv("REDOC_URL"):
+        return redoc_url
+
+    if str_to_bool(os.getenv("NO_REDOC")) is True:
+        return None
+
+    return "/redoc"
 
 
 def _get_docs_url() -> Optional[str]:
