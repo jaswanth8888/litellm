@@ -119,7 +119,7 @@ class BadRequestError(openai.BadRequestError):  # type: ignore
         num_retries: Optional[int] = None,
     ):
         self.status_code = 400
-        self.message = "{label}.BadRequestError: {}".format(message)
+        self.message = "{}.BadRequestError: {}".format(label,message)
         self.model = model
         self.llm_provider = llm_provider
         self.litellm_debug_info = litellm_debug_info

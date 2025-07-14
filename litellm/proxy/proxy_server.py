@@ -108,7 +108,7 @@ from litellm import Router
 from litellm._logging import verbose_proxy_logger, verbose_router_logger
 from litellm.caching.caching import DualCache, RedisCache
 from litellm.constants import LITELLM_PROXY_ADMIN_NAME
-from litellm.constants import LITELLM_LABEL as label
+from litellm.constants import LITELLM_LABEL as label, REMOVE_LITELLM_HEADERS as remove_litellm_headers
 from litellm.exceptions import RejectedRequestError
 from litellm.integrations.SlackAlerting.slack_alerting import SlackAlerting
 from litellm.litellm_core_utils.core_helpers import (
@@ -691,8 +691,12 @@ try:
 
         @app.middleware("http")
         async def redirect_ui_middleware(request: Request, call_next):
+            if request.url.path == "/ui":
+                return JSONResponse(
+            status_code=404,
+            content={"detail": "Not Found"})
             if request.url.path.startswith("/ui"):
-                new_url = str(request.url).replace("/ui", f"{server_root_path}/ui", 1)
+                new_url = str(request.url.path).replace("/ui", f"{server_root_path}/ui", 1)
                 return RedirectResponse(new_url)
             return await call_next(request)
 
@@ -832,7 +836,8 @@ def get_custom_headers(
         logging_caching_headers = get_logging_caching_headers(request_data)
         if logging_caching_headers:
             headers.update(logging_caching_headers)
-
+    if remove_litellm_headers:
+        return {}
     try:
         return {
             key: str(value)
